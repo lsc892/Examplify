@@ -1,0 +1,16 @@
+node_modules/
+*.log
+
+# 데이터·산출물: 폴더 구조(.gitkeep)만 남기고 내용은 제외
+# (저작권 강의자료·추출물·분석결과·완성본은 커밋하지 않음)
+Lecture slides/*
+!Lecture slides/.gitkeep
+
+build/*
+!build/.gitkeep
+
+Analyze/*
+!Analyze/.gitkeep
+
+output/*
+!output/.gitkeep

@@ -1,0 +1,17 @@
+{
+  "name": "exam-study-guide",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "convert": "node scripts/convert.mjs",
+    "validate": "node scripts/validate.mjs",
+    "render": "node scripts/render.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cfb": "^1.2.2",
+    "fflate": "^0.8.2",
+    "pdfjs-dist": "^6.0.227"
+  }
+}

@@ -1,0 +1,3 @@
+# PDF -> Markdown(+이미지 추출) + 페이지 래스터용. pymupdf4llm 설치 시 pymupdf(fitz) 동반 설치됨.
+# 설치: pip install -r requirements.txt   (미설치 시 convert.mjs가 Node pdfjs 텍스트 폴백)
+pymupdf4llm>=0.0.17
