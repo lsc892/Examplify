@@ -22,6 +22,7 @@
 | `PKG_ROOT` | 상수 | 패키지 루트 절대경로 (번들 기준) |
 | `PY_SCRIPT` | 상수 | `scripts/pdf_to_md.py` 경로 |
 | `CSS_FILE` | 상수 | `templates/guide.css` 경로 |
+| `REQUIREMENTS` | 상수 | `requirements.txt` 경로 (setup의 pip 설치용) |
 | `DEFAULT_DPI` | 상수 | 페이지 PNG 래스터 기본 150 |
 | `workspace(root?)` | 함수 | ROOT 기준 디렉터리 묶음 반환 |
 

@@ -34,16 +34,17 @@ flowchart LR
 | `convert/` | 자료 → build 변환 파이프라인 | [convert](convert.md) |
 | `schema/` | 분석 JSON 검증 | [schema](schema.md) |
 | `render/` | 분석 JSON → HTML 생성 | [render](render.md) |
+| `setup/` | Python·pymupdf4llm 점검·설치 (`npm run setup`) | [아키텍처](architecture.md) |
 
-전체 트리·데이터 흐름·SOLID 적용은 → **[아키텍처](architecture.md)**
+전체 트리·데이터 흐름·폴더별 책임은 → **[아키텍처](architecture.md)**
 
 ---
 
 ## 빠른 실행
 
 ```bash
-npm install                  # 의존성(fflate, cfb, pdfjs-dist)
-pip install -r requirements.txt   # pymupdf4llm (선택, 그림 판독용)
+npm install                  # Node 의존성(fflate, cfb, pdfjs-dist)
+npm run setup                # Python + pymupdf4llm 점검·설치(그림 판독용; 안내 후 동의 시 설치)
 
 # 자료를 Lecture slides/ 에 넣고:
 npm run convert   # ① → build/
@@ -56,6 +57,6 @@ npm test          # 순수 함수 회귀 (node:test)
 엔트리포인트 3개는 [scripts/](../../scripts/)에 있는 얇은 조립 파일이고, 로직은 전부 `src/`에 있다.
 
 ## 관련 문서
-- [아키텍처](architecture.md) — 트리·데이터 흐름·SOLID
+- [아키텍처](architecture.md) — 트리·데이터 흐름·폴더 책임·pickPython 분기
 - [exam-guide 스킬 정의](../../.claude/skills/exam-guide/SKILL.md)
 - [강의 JSON 스키마](../../schema/lecture.schema.md)

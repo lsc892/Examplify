@@ -8,6 +8,7 @@ export const PKG_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)
 // 번들 자산(실행 위치와 무관).
 export const PY_SCRIPT = path.join(PKG_ROOT, 'scripts', 'pdf_to_md.py');
 export const CSS_FILE = path.join(PKG_ROOT, 'templates', 'guide.css');
+export const REQUIREMENTS = path.join(PKG_ROOT, 'requirements.txt');
 
 export const DEFAULT_DPI = 150;
 

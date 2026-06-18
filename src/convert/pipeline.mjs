@@ -90,7 +90,7 @@ export async function runConvert(ws = workspace()) {
   // PDF → 마크다운(+이미지) + 페이지 PNG 추출.
   const py = pickPython();
   if (py) console.log(`\n추출(Python ${py.cmd} ${py.prefix.join(' ')}): build/md + build/pages`);
-  else console.warn('\nPython 미발견 → Node pdfjs 텍스트 폴백(이미지 없음). 그림 판독이 필요하면 requirements.txt 설치.');
+  else console.warn('\nPython 미발견 → Node pdfjs 텍스트 폴백(이미지 없음). 그림 판독이 필요하면 `npm run setup`으로 Python+pymupdf4llm 설치.');
   let mdOk = 0, pagesOk = 0, mdFallback = 0;
   for (const { src, pdf } of producedPdfs) {
     let extracted = false;

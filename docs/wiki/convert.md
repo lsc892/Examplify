@@ -33,6 +33,7 @@
 
 - **경로 안전화**: [`safeName`](../../src/convert/artifacts.mjs)이 공백을 `_`로 — pymupdf4llm가 `image_path` 공백을 치환해 경로가 어긋나는 문제 차단.
 - **다층 폴백**: LibreOffice 실패 → hwp 텍스트 폴백 / Python 실패 → pdfjs 텍스트 폴백. 한 자료가 깨져도 나머지는 진행.
+- **환경 준비**: 그림·페이지 PNG 추출에 필요한 Python/pymupdf4llm이 없으면 `npm run setup`이 점검 후 동의 시 설치한다([setup 오케스트레이션](../../src/setup/pipeline.mjs)). 없을 때는 그대로 텍스트 폴백.
 - **의존성 주입**: `findSoffice(exists)`·`pickPython(env)`가 인자로 환경을 받아 테스트 가능.
 
 ## 산출물 (다음 단계 입력)
