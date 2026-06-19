@@ -27,16 +27,12 @@ description: 수업 자료(.hwp/.ppt/.pptx/.xlsx/.pdf)로 기말시험 대비 HT
    - `.xlsx` → 추가로 `artifacts/build/xlsx-dump/`에 셀 텍스트(숫자 정확도 보강).
    - `.hwp` → LibreOffice가 못 열면(흔함) `artifacts/build/hwp-dump/`에 HWP5 본문 텍스트 폴백 자동 생성.
    - PDF 출력명은 `<원본파일명>.pdf`로 유일화(동일 베이스명 충돌 방지). 단 `.pdf`는 이름 유지.
-3. **분석(Claude)**:
-   - `artifacts/build/md/*.md`를 읽어 텍스트·표를 싸게 파악한다(대용량 우선 경로).
-   - md에서 중요한 개념을 만나면 **바로 위 `<!-- PAGE n -->` 마커로 페이지 번호를 확인**하고, 그 `artifacts/build/pages/<파일>/pNNN.png` 를 콕 집어 **Read 도구로 시각 판독**한다 → md 텍스트와 페이지 그림을 정확히 교차검증한다. (마커는 있는데 본문이 거의 비면 = 이미지·도표 위주 페이지이므로 반드시 PNG로 확인.)
-   - 필요한 페이지만 선별해 보고(전 페이지 정독 금지), `artifacts/build/md/<파일>.assets/*.png` 의 임베디드 이미지도 함께 본다 → 그림·사진·도표·이미지로 된 수식까지 실제로 보고 근거로 삼는다.
-   - 보충(필요 시): `artifacts/build/hwp-dump`·`artifacts/build/xlsx-dump` 텍스트.
-   - 강의 단위로 **필수 개념(`이해할_개념`) + 외울 것(`외울_것`) + 핵심 공식(`공식`)만** 추려 `artifacts/analyze/lectures/<Lec>.json` 과 `artifacts/analyze/course.json` 을 `schema/lecture.schema.md` 형식으로 작성한다. 부가 설명은 넣지 않는다(가이드는 시험 직전용으로 lean하게).
-   - **그림이 개념 이해에 실제로 도움이 됐거나 중요한 경우** → 그 이미지를 강의의 `그림` 배열에 `{ src, caption, why }`로 넣는다. `src`는 본 이미지의 작업폴더 상대경로(`artifacts/build/pages/<파일>/p003.png` 또는 `artifacts/build/md/<파일>.assets/<img>.png`). render가 읽어 HTML에 base64로 인라인한다. **도표·다이어그램·사진처럼 글로 대체하기 어려운 것만** 골라 남발하지 않는다.
-   - 출제 경향 = 자료 신호(반복·워크드 예제·강조·도표) + 과목 도메인 지식. 각 항목에 `exam` 난이도와 근거를 단다.
-   - 작성 후 `node scripts/validate.mjs` 가 exit 0 인지 확인한다.
-   - **컨텍스트 로깅**: 자료(PDF/강의)를 **하나 다 분석하고 다음 자료로 넘어가는 순간마다** `node scripts/ctxlog.mjs "<방금 끝낸 자료명>"` 을 호출한다 → 그 시점 컨텍스트 채움 %와 누계 토큰이 `artifacts/ctx-usage.log`(gitignore됨)에 한 줄씩 쌓인다. 마지막 자료까지 끝나면 `node scripts/ctxlog.mjs "FINAL"` 로 마감 줄을 남긴다.
+3. **분석(Claude) — 자료별 서브에이전트 디스패치(map) → 종합(reduce)**:
+   - **왜 이 구조인가**: 한 세션에서 모든 자료를 직접 Read하면 읽은 md·PNG가 메인 대화에 계속 누적돼 컨텍스트가 자료 수에 비례해 차오른다. 자료별 분석을 **격리된 콜드 컨텍스트(서브에이전트)** 에서 돌려, 무거운 원문은 그 컨텍스트와 함께 버리고 메인엔 **가벼운 JSON·요약만** 남긴다(map-reduce + 외부 상태화).
+   - **map (자료별 격리)**: `artifacts/build/md/*.md` 한 파일 = 자료 1개. 자료마다 `Agent`(subagent_type: `exam-analyzer`)를 1개씩 디스패치해, 그 자료의 md·페이지 PNG를 **서브에이전트 자기 컨텍스트에서** 읽고 강의별 `artifacts/analyze/lectures/<Lec>.json`만 쓰게 한다. 서로 독립이므로 한 메시지에서 여러 개 **병렬** 가능(자료가 많으면 적당히 배치). 자료별 분석 규칙(md로 싸게 훑기 → 핵심 개념 페이지만 PNG 시각 교차검증 → `이해할_개념`+`외울_것`+`공식`+`예상_출제포인트`만 lean, 글로 대체 어려운 도표만 `그림`, 각 항목 `exam` 난이도·근거)은 `exam-analyzer` 에이전트가 이 절과 `schema/lecture.schema.md`를 읽어 따른다.
+   - **컨텍스트 로깅**: 자료 서브에이전트가 하나 끝나 돌아올 때마다 `node scripts/ctxlog.mjs "<방금 끝낸 자료명>"` 을 호출한다 → 메인 컨텍스트가 자료 수에 비례해 차오르지 않고 평탄 유지됨이 `artifacts/ctx-usage.log`(gitignore됨)에 한 줄씩 기록된다.
+   - **reduce (메인)**: 모든 자료가 끝나면 가벼운 `artifacts/analyze/lectures/*.json`만 읽어 과목 종합 `artifacts/analyze/course.json`을 `schema/lecture.schema.md` 형식으로 작성한다(시험 출제경향·학습 우선순위 = 강의 JSON들의 신호 + 과목 도메인 지식). **원본 md·PNG를 메인에서 다시 읽지 않는다.**
+   - 작성 후 `node scripts/validate.mjs` 가 exit 0 인지 확인하고, 이어 `node scripts/ctxlog.mjs "FINAL"` 로 마감 줄을 남긴다.
 4. **렌더**: `npm run render` → `desk/output/study-guide.html`. 브라우저로 확인.
    - 렌더(output)까지 끝나면 `node scripts/ctxlog.mjs "OUTPUT-DONE"` 로 최종 누계를 한 줄 더 남긴다.
 

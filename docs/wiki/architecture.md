@@ -56,7 +56,7 @@ flowchart TD
     PYX --> MD[artifacts/build/md + artifacts/build/pages PNG]
     FB --> MD
   end
-  MD -.->|Claude 분석| AJ[artifacts/analyze/lectures·course.json]
+  MD -.->|② Claude 분석 (자료별 서브에이전트 map → 메인 reduce)| AJ[artifacts/analyze/lectures·course.json]
   XL -.->|보충 참조| AJ
   HW -.->|보충 참조| AJ
   subgraph render["③ render (runRender)"]
@@ -68,6 +68,15 @@ flowchart TD
 ```
 
 각 단계 상세: [convert](convert.md) · [extract](extract.md) · [schema](schema.md) · [render](render.md). 경로 상수는 [config](config.md).
+
+## ② 분석 — 자료별 서브에이전트 (map-reduce)
+
+분석은 메인 스레드가 한 번에 다 읽지 않는다. 한 세션에서 모든 자료(md·페이지 PNG)를 직접 Read하면 원문이 메인 컨텍스트에 자료 수만큼 누적되기 때문이다([ctxlog.mjs](../../scripts/ctxlog.mjs)가 그 단조 증가를 측정한다). 대신:
+
+- **map**: `artifacts/build/md/*.md` 자료 1개마다 [`exam-analyzer`](../../.claude/agents/exam-analyzer.md) 서브에이전트를 1개씩 디스패치한다. 각 워커는 **자기 격리 컨텍스트**에서 그 자료의 md·PNG를 읽어 강의별 `artifacts/analyze/lectures/<Lec>.json`만 쓰고, 가벼운 경로·요약만 반환한다. 무거운 원문은 워커 컨텍스트와 함께 폐기된다 → 메인 컨텍스트는 평탄 유지.
+- **reduce**: 메인은 가벼운 `lectures/*.json`만 모아 `course.json`을 쓴다(원본 md·PNG 재독 없음).
+
+즉 추출(JSON 외부 저장)에 더해 **입력 폐기(컨텍스트 비움)** 까지 갖춘 map-reduce다. 절차는 [exam-guide 스킬](../../.claude/skills/exam-guide/SKILL.md) 3절.
 
 ## pickPython 분기 — 왜 두 갈래인가
 
