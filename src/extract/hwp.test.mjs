@@ -29,7 +29,7 @@ test('extractParaText: PARA_TEXT(67) 외 레코드는 무시', () => {
 });
 
 test('hwpToText: 실제 .hwp에서 한국어 추출(cfb 있을 때만)', async () => {
-  const p = 'Lecture slides/Lec7_1_도시화물수요분석모형.hwp';
+  const p = 'desk/intake/Lec7_1_도시화물수요분석모형.hwp';
   if (!fs.existsSync(p)) return;
   const t = await hwpToText(fs.readFileSync(p));
   if (t === null) return; // cfb 미설치 → 스킵

@@ -36,7 +36,7 @@ test('validateLecture: 그림 선택 필드 없어도 통과', () => {
 });
 
 test('validateLecture: 그림 정상 항목 통과', () => {
-  const ok = { ...goodLecture, 그림: [{ src: 'build/pages/L05/p003.png', caption: '현시도', why: '흐름' }] };
+  const ok = { ...goodLecture, 그림: [{ src: 'artifacts/build/pages/L05/p003.png', caption: '현시도', why: '흐름' }] };
   assert.equal(validateLecture(ok).ok, true);
 });
 

@@ -44,7 +44,7 @@ test('renderFormulaTable: 수식을 $...$로 감싸 출력 + 공식명', () => {
 
 test('renderFigures: embed(data URI) 우선 사용 + 캡션/why', () => {
   const h = renderFigures({ 그림: [
-    { src: 'build/pages/L05/p003.png', embed: 'data:image/png;base64,AAAA',
+    { src: 'artifacts/build/pages/L05/p003.png', embed: 'data:image/png;base64,AAAA',
       caption: '신호 현시도', why: '제어 흐름 이해' }] });
   assert.match(h, /<h3>핵심 그림<\/h3>/);
   assert.match(h, /src="data:image\/png;base64,AAAA"/);  // embed 사용

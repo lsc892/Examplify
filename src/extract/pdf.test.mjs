@@ -10,7 +10,7 @@ test('collapseWs: 연속 공백/개행 정리', () => {
 });
 
 test('pdfToText: 실제 PDF에서 한국어 추출(pdfjs 있을 때만)', async () => {
-  const dir = 'Lecture slides';
+  const dir = 'desk/intake';
   if (!fs.existsSync(dir)) return;
   const pdf = fs.readdirSync(dir).find(f => f.toLowerCase().endsWith('.pdf'));
   if (!pdf) return;

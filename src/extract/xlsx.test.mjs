@@ -36,7 +36,7 @@ import { xlsxToText } from './xlsx.mjs';
 import fs from 'node:fs';
 
 test('xlsxToText: 실제 Lec6_2 워크북에서 텍스트 추출(fflate 있을 때만)', async () => {
-  const p = 'Lecture slides/Lec6_2_4단계 모형 - 화물철도 경제성분석.xlsx';
+  const p = 'desk/intake/Lec6_2_4단계 모형 - 화물철도 경제성분석.xlsx';
   if (!fs.existsSync(p)) return;            // 파일 없으면 스킵
   const text = await xlsxToText(fs.readFileSync(p));
   if (text === null) return;                // fflate 미설치 → 스킵(그레이스풀)
