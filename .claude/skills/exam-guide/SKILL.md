@@ -36,7 +36,9 @@ description: 수업 자료(.hwp/.ppt/.pptx/.xlsx/.pdf)로 기말시험 대비 HT
    - **그림이 개념 이해에 실제로 도움이 됐거나 중요한 경우** → 그 이미지를 강의의 `그림` 배열에 `{ src, caption, why }`로 넣는다. `src`는 본 이미지의 작업폴더 상대경로(`artifacts/build/pages/<파일>/p003.png` 또는 `artifacts/build/md/<파일>.assets/<img>.png`). render가 읽어 HTML에 base64로 인라인한다. **도표·다이어그램·사진처럼 글로 대체하기 어려운 것만** 골라 남발하지 않는다.
    - 출제 경향 = 자료 신호(반복·워크드 예제·강조·도표) + 과목 도메인 지식. 각 항목에 `exam` 난이도와 근거를 단다.
    - 작성 후 `node scripts/validate.mjs` 가 exit 0 인지 확인한다.
+   - **컨텍스트 로깅**: 자료(PDF/강의)를 **하나 다 분석하고 다음 자료로 넘어가는 순간마다** `node scripts/ctxlog.mjs "<방금 끝낸 자료명>"` 을 호출한다 → 그 시점 컨텍스트 채움 %와 누계 토큰이 `artifacts/ctx-usage.log`(gitignore됨)에 한 줄씩 쌓인다. 마지막 자료까지 끝나면 `node scripts/ctxlog.mjs "FINAL"` 로 마감 줄을 남긴다.
 4. **렌더**: `npm run render` → `desk/output/study-guide.html`. 브라우저로 확인.
+   - 렌더(output)까지 끝나면 `node scripts/ctxlog.mjs "OUTPUT-DONE"` 로 최종 누계를 한 줄 더 남긴다.
 
 ## 주의
 - 페이지 PNG는 기본 150dpi. 작은 글씨가 안 읽히면 `src/config/paths.mjs`의 `DEFAULT_DPI`(또는 `pdf_to_md.py --dpi`)를 올린다(파일·토큰 비용 증가).

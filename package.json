@@ -8,6 +8,7 @@
     "convert": "node scripts/convert.mjs",
     "validate": "node scripts/validate.mjs",
     "render": "node scripts/render.mjs",
+    "ctxlog": "node scripts/ctxlog.mjs",
     "test": "node --test"
   },
   "dependencies": {

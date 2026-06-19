@@ -31,5 +31,6 @@ export function workspace(root = process.env.EXAM_GUIDE_DIR || process.cwd()) {
     pagesRoot: path.join(artifacts, 'build', 'pages'),
     lecDir: path.join(artifacts, 'analyze', 'lectures'),
     courseJson: path.join(artifacts, 'analyze', 'course.json'),
+    ctxLog: path.join(artifacts, 'ctx-usage.log'),
   };
 }
