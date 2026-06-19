@@ -12,9 +12,11 @@ export function sofficeOutputPdf(srcFile, outdir) {
   return path.join(outdir, `${path.basename(srcFile, path.extname(srcFile))}.pdf`);
 }
 
-/** 출력 디렉터리/파일명 안전화: 공백류를 _로(pymupdf4llm가 image_path 공백을 치환해 경로 불일치 유발). */
+/** 출력 디렉터리/파일명 안전화: 유니코드 글자·숫자·`._-` 외 문자를 _로.
+ *  pymupdf4llm가 image_path의 공백·괄호 등 특수문자를 치환해 경로가 어긋나는 문제 차단
+ *  (한글 등 유니코드 글자는 보존 → Node가 만든 디렉터리와 pymupdf 출력 경로가 일치). */
 export function safeName(name) {
-  return String(name).replace(/\s+/g, '_');
+  return String(name).replace(/[^\p{L}\p{N}._-]+/gu, '_');
 }
 
 /** PDF(또는 원본) → 마크다운 출력 경로. build/md/<safe-basename>.md */

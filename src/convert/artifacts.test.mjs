@@ -29,6 +29,15 @@ test('safeName: 공백류를 _로 치환', () => {
   assert.equal(safeName('a\tb  c'), 'a_b_c');
 });
 
+test('safeName: 괄호 등 특수문자도 _로(한글·숫자·._- 보존)', () => {
+  // pymupdf4llm가 ()를 -로 치환해 경로가 어긋나던 회귀
+  assert.equal(safeName('Lecture_04 대중교통 용량(5-7주차)-2.pdf'),
+    'Lecture_04_대중교통_용량_5-7주차_-2.pdf');
+  assert.equal(safeName('a(b)c'), 'a_b_c');
+  // 영문/숫자/._- 만 있으면 그대로
+  assert.equal(safeName('L05_TMC_Actuated-signal.pdf'), 'L05_TMC_Actuated-signal.pdf');
+});
+
 test('mdPath/pagesDir/assetsDir: basename 기준 + 공백 안전화 경로', () => {
   assert.equal(mdPath('Lecture slides/Lec5.pptx', 'build/md'), path.join('build/md', 'Lec5.pptx.md'));
   assert.equal(pagesDir('build/pdf/Lec5.pptx.pdf', 'build/pages'),
