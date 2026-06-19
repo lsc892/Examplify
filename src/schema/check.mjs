@@ -1,4 +1,4 @@
-// 분석 산출물 검증 실행: desk/analyze/lectures/*.json·course.json 을 스키마로 점검. 실패 시 exit 1.
+// 분석 산출물 검증 실행: artifacts/analyze/lectures/*.json·course.json 을 스키마로 점검. 실패 시 exit 1.
 import fs from 'node:fs';
 import path from 'node:path';
 import { workspace } from '../config/paths.mjs';

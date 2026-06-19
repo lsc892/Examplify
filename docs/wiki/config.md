@@ -11,7 +11,7 @@
 | 기준 | 무엇 | 어떻게 |
 |---|---|---|
 | **번들(PKG_ROOT)** | 도구 자체 자산(`pdf_to_md.py`, `guide.css`) | `paths.mjs` 위치에서 `../../`로 패키지 루트 고정 → **어디서 실행하든 불변** |
-| **작업 폴더(ROOT)** | 사용자 자료·산출물(`desk/build/`, `desk/analyze/`, `desk/output/`) | `EXAM_GUIDE_DIR` 환경변수, 없으면 `process.cwd()` |
+| **작업 폴더(ROOT)** | 사용자 자료·산출물(`artifacts/build/`, `artifacts/analyze/`, `desk/output/`) | `EXAM_GUIDE_DIR` 환경변수, 없으면 `process.cwd()` |
 
 이 분리 덕분에 도구를 한 곳에 두고 아무 작업 폴더에서나 실행할 수 있다.
 
@@ -31,13 +31,13 @@
 ```
 root        작업 폴더
 srcDir      desk/intake/         (입력 자료)
-pdfDir      desk/build/pdf/              (변환된 PDF)
-dumpDir     desk/build/xlsx-dump/        (xlsx 셀 텍스트)
-hwpDir      desk/build/hwp-dump/         (hwp 본문 폴백)
-mdDir       desk/build/md/               (마크다운 + .assets 이미지)
-pagesRoot   desk/build/pages/            (페이지 PNG)
-lecDir      desk/analyze/lectures/       (강의별 분석 JSON)
-courseJson  desk/analyze/course.json     (과목 종합)
+pdfDir      artifacts/build/pdf/              (변환된 PDF)
+dumpDir     artifacts/build/xlsx-dump/        (xlsx 셀 텍스트)
+hwpDir      artifacts/build/hwp-dump/         (hwp 본문 폴백)
+mdDir       artifacts/build/md/               (마크다운 + .assets 이미지)
+pagesRoot   artifacts/build/pages/            (페이지 PNG)
+lecDir      artifacts/analyze/lectures/       (강의별 분석 JSON)
+courseJson  artifacts/analyze/course.json     (과목 종합)
 outHtml     desk/output/study-guide.html (최종 결과)
 ```
 

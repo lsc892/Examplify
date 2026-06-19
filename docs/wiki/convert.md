@@ -2,7 +2,7 @@
 
 # convert — 자료 → build 변환 파이프라인 (①단계)
 
-> **책임**: `desk/intake/`의 원본 자료를 `desk/build/`의 분석용 산출물(PDF · 마크다운 · 페이지 PNG · 텍스트 덤프)로 만든다. 결정적(코드만, 판단 없음).
+> **책임**: `desk/intake/`의 원본 자료를 `artifacts/build/`의 분석용 산출물(PDF · 마크다운 · 페이지 PNG · 텍스트 덤프)로 만든다. 결정적(코드만, 판단 없음).
 
 소스: [src/convert/](../../src/convert/) · 진입: `npm run convert` → [scripts/convert.mjs](../../scripts/convert.mjs) → `runConvert()`
 
@@ -18,14 +18,14 @@
 
 ## runConvert 흐름
 
-1. `workspace()`로 디렉터리 확보, `desk/build/*` 생성.
+1. `workspace()`로 디렉터리 확보, `artifacts/build/*` 생성.
 2. [`discoverSources`](../../src/convert/sources.mjs)로 자료 목록(정렬). 빈 파일은 건너뜀.
 3. 파일별:
-   - **`.pdf`** → 변환 없이 `desk/build/pdf/`로 그대로 통과(이름 유지).
+   - **`.pdf`** → 변환 없이 `artifacts/build/pdf/`로 그대로 통과(이름 유지).
    - **그 외** → [`convertToPdf`](../../src/convert/libreoffice.mjs)(LibreOffice headless)로 PDF. 출력명을 `<원본파일명>.pdf`로 유일화([`expectedPdf`](../../src/convert/artifacts.mjs)) — 동일 베이스명 충돌 방지.
-   - **`.xlsx`/`.hwp`** → [extract](extract.md)로 텍스트 덤프 추가(`desk/build/xlsx-dump`·`desk/build/hwp-dump`).
+   - **`.xlsx`/`.hwp`** → [extract](extract.md)로 텍스트 덤프 추가(`artifacts/build/xlsx-dump`·`artifacts/build/hwp-dump`).
 4. 확보된 PDF마다 추출:
-   - [`pickPython`](../../src/convert/python.mjs) 성공 → [`runPythonExtract`](../../src/convert/python.mjs)가 [pdf_to_md.py](../../scripts/pdf_to_md.py) 실행 → `desk/build/md/*.md`(페이지 마커 `<!-- PAGE n | pNNN.png -->`) + `.assets` 이미지 + `desk/build/pages/*.png`.
+   - [`pickPython`](../../src/convert/python.mjs) 성공 → [`runPythonExtract`](../../src/convert/python.mjs)가 [pdf_to_md.py](../../scripts/pdf_to_md.py) 실행 → `artifacts/build/md/*.md`(페이지 마커 `<!-- PAGE n | pNNN.png -->`) + `.assets` 이미지 + `artifacts/build/pages/*.png`.
    - Python 없음/실패 → [`pdfToMarkdown`](../../src/extract/pdf.mjs) 텍스트 폴백(이미지 없음, `## p.N`).
 5. [`verifyOutputs`](../../src/convert/artifacts.mjs)로 성공/실패·HWP폴백 리포트.
 
@@ -37,7 +37,7 @@
 - **의존성 주입**: `findSoffice(exists)`·`pickPython(env)`가 인자로 환경을 받아 테스트 가능.
 
 ## 산출물 (다음 단계 입력)
-`desk/build/md`(텍스트·표) + `desk/build/pages`(페이지 PNG)를 **Claude가 읽고 봐서** `desk/analyze/*.json`을 만든다 → [schema](schema.md). 페이지 마커로 md↔PNG를 매칭하는 의도는 [exam-guide 스킬](../../.claude/skills/exam-guide/SKILL.md) 참고.
+`artifacts/build/md`(텍스트·표) + `artifacts/build/pages`(페이지 PNG)를 **Claude가 읽고 봐서** `artifacts/analyze/*.json`을 만든다 → [schema](schema.md). 페이지 마커로 md↔PNG를 매칭하는 의도는 [exam-guide 스킬](../../.claude/skills/exam-guide/SKILL.md) 참고.
 
 ## 관련 문서
 [extract](extract.md) · [config](config.md) · [schema](schema.md) · [아키텍처](architecture.md)

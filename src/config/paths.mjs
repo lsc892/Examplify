@@ -1,5 +1,5 @@
-// 경로·디렉터리 설정 한 곳. 엔진(번들) 자산은 패키지 루트 기준,
-// 작업 산출물은 ROOT/desk/ 아래에 모은다(intake·build·analyze·output).
+// 경로·디렉터리 설정 한 곳. 엔진(번들) 자산은 패키지 루트 기준.
+// 사용자 입출력은 ROOT/desk/(intake·output), 중간 산출물은 ROOT/artifacts/(build·analyze).
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -14,20 +14,22 @@ export const REQUIREMENTS = path.join(PKG_ROOT, 'requirements.txt');
 export const DEFAULT_DPI = 150;
 
 /** 작업 폴더(ROOT) 기준 디렉터리 묶음. EXAM_GUIDE_DIR 미지정 시 현재 작업 디렉터리.
- *  모든 작업 산출물은 ROOT/desk/ 아래에 둔다: 자료는 desk/intake/, 결과는 desk/output/. */
+ *  사용자 입출력은 desk/(intake·output), 중간 산출물은 artifacts/(build·analyze)에 둔다. */
 export function workspace(root = process.env.EXAM_GUIDE_DIR || process.cwd()) {
   const desk = path.join(root, 'desk');
+  const artifacts = path.join(root, 'artifacts');
   return {
     root,
     desk,
+    artifacts,
     srcDir: path.join(desk, 'intake'),
-    pdfDir: path.join(desk, 'build', 'pdf'),
-    dumpDir: path.join(desk, 'build', 'xlsx-dump'),
-    hwpDir: path.join(desk, 'build', 'hwp-dump'),
-    mdDir: path.join(desk, 'build', 'md'),
-    pagesRoot: path.join(desk, 'build', 'pages'),
-    lecDir: path.join(desk, 'analyze', 'lectures'),
-    courseJson: path.join(desk, 'analyze', 'course.json'),
     outHtml: path.join(desk, 'output', 'study-guide.html'),
+    pdfDir: path.join(artifacts, 'build', 'pdf'),
+    dumpDir: path.join(artifacts, 'build', 'xlsx-dump'),
+    hwpDir: path.join(artifacts, 'build', 'hwp-dump'),
+    mdDir: path.join(artifacts, 'build', 'md'),
+    pagesRoot: path.join(artifacts, 'build', 'pages'),
+    lecDir: path.join(artifacts, 'analyze', 'lectures'),
+    courseJson: path.join(artifacts, 'analyze', 'course.json'),
   };
 }

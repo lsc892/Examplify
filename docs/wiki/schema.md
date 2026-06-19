@@ -2,7 +2,7 @@
 
 # schema — 분석 JSON 검증 (②와 ③ 사이)
 
-> **책임**: 분석 단계(②)가 만든 `desk/analyze/*.json`이 렌더가 기대하는 형식을 지키는지 점검한다. 검증 **규칙**(순수)과 검증 **실행**(I/O)을 분리.
+> **책임**: 분석 단계(②)가 만든 `artifacts/analyze/*.json`이 렌더가 기대하는 형식을 지키는지 점검한다. 검증 **규칙**(순수)과 검증 **실행**(I/O)을 분리.
 
 소스: [src/schema/](../../src/schema/) · 진입: `npm run validate` → [scripts/validate.mjs](../../scripts/validate.mjs) → `runValidate()`
 

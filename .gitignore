@@ -1,16 +1,16 @@
 node_modules/
 *.log
 
-# 작업공간(desk): 폴더 구조(.gitkeep)만 남기고 내용은 제외
-# (저작권 강의자료·추출물·분석결과·완성본은 커밋하지 않음)
+# 작업공간: 폴더 구조(.gitkeep)만 남기고 내용은 제외 (둘 다 데이터)
+# desk = 사용자 입출력(intake·output), artifacts = 중간 산출물(build·analyze)
 desk/intake/*
 !desk/intake/.gitkeep
 
-desk/build/*
-!desk/build/.gitkeep
-
-desk/analyze/*
-!desk/analyze/.gitkeep
-
 desk/output/*
 !desk/output/.gitkeep
+
+artifacts/build/*
+!artifacts/build/.gitkeep
+
+artifacts/analyze/*
+!artifacts/analyze/.gitkeep

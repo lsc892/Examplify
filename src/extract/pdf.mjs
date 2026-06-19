@@ -28,7 +28,7 @@ export async function pdfToText(buffer) {
 
 /**
  * .pdf 버퍼 → 페이지별 `## p.N` 헤더가 붙은 마크다운(폴백용, 이미지 없음).
- * Python(pymupdf4llm) 미설치 시 desk/build/md/<file>.md 를 이 텍스트로 대체한다.
+ * Python(pymupdf4llm) 미설치 시 artifacts/build/md/<file>.md 를 이 텍스트로 대체한다.
  * pdfjs 없으면 null.
  */
 export async function pdfToMarkdown(buffer) {
@@ -38,7 +38,7 @@ export async function pdfToMarkdown(buffer) {
   const doc = await pdfjs.getDocument({
     data: new Uint8Array(buffer), useSystemFonts: true, isEvalSupported: false,
   }).promise;
-  const parts = ['> 폴백 추출(텍스트만, 이미지 없음). 그림/사진은 desk/build/pages PNG로 시각 판독.\n'];
+  const parts = ['> 폴백 추출(텍스트만, 이미지 없음). 그림/사진은 artifacts/build/pages PNG로 시각 판독.\n'];
   for (let p = 1; p <= doc.numPages; p++) {
     const page = await doc.getPage(p);
     const content = await page.getTextContent();

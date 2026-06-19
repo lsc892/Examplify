@@ -10,16 +10,16 @@
 
 ```mermaid
 flowchart LR
-  A[desk/intake/<br/>원본 자료] -->|① convert<br/>결정적| B[desk/build/<br/>md · 페이지 PNG · 덤프]
-  B -->|② 분석<br/>Claude 판단| C[desk/analyze/<br/>lectures·course.json]
+  A[desk/intake/<br/>원본 자료] -->|① convert<br/>결정적| B[artifacts/build/<br/>md · 페이지 PNG · 덤프]
+  B -->|② 분석<br/>Claude 판단| C[artifacts/analyze/<br/>lectures·course.json]
   C -->|③ render<br/>결정적| D[desk/output/<br/>study-guide.html]
 ```
 
 | 단계 | 주체 | 입력 → 출력 | 문서 |
 |---|---|---|---|
-| ① 변환·추출 | 코드(결정적) | `desk/intake/` → `desk/build/` | [convert](convert.md) · [extract](extract.md) |
-| ② 분석 | **Claude(판단)** | `desk/build/` → `desk/analyze/*.json` | [schema](schema.md) (검증 규칙) |
-| ③ 렌더 | 코드(결정적) | `desk/analyze/*.json` → `desk/output/study-guide.html` | [render](render.md) |
+| ① 변환·추출 | 코드(결정적) | `desk/intake/` → `artifacts/build/` | [convert](convert.md) · [extract](extract.md) |
+| ② 분석 | **Claude(판단)** | `artifacts/build/` → `artifacts/analyze/*.json` | [schema](schema.md) (검증 규칙) |
+| ③ 렌더 | 코드(결정적) | `artifacts/analyze/*.json` → `desk/output/study-guide.html` | [render](render.md) |
 
 ②만 사람/LLM 판단이고 ①③은 스크립트가 자동. 자세한 워크플로는 [exam-guide 스킬](../../.claude/skills/exam-guide/SKILL.md).
 
@@ -47,8 +47,8 @@ npm install                  # Node 의존성(fflate, cfb, pdfjs-dist)
 npm run setup                # Python + pymupdf4llm 점검·설치(그림 판독용; 안내 후 동의 시 설치)
 
 # 자료를 desk/intake/ 에 넣고:
-npm run convert   # ① → desk/build/
-#  ② Claude가 desk/build/ 읽고 desk/analyze/*.json 작성
+npm run convert   # ① → artifacts/build/
+#  ② Claude가 artifacts/build/ 읽고 artifacts/analyze/*.json 작성
 npm run validate  # ②결과 스키마 점검 (exit 0 확인)
 npm run render    # ③ → desk/output/study-guide.html
 npm test          # 순수 함수 회귀 (node:test)

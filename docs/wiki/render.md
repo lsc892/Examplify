@@ -2,7 +2,7 @@
 
 # render — 분석 JSON → HTML (③단계)
 
-> **책임**: 검증된 `desk/analyze/*.json`을 **자체완결 단일 HTML**(`desk/output/study-guide.html`)로 만든다. 결정적. 그림은 base64로 인라인해 파일 하나로 끝나게 한다.
+> **책임**: 검증된 `artifacts/analyze/*.json`을 **자체완결 단일 HTML**(`desk/output/study-guide.html`)로 만든다. 결정적. 그림은 base64로 인라인해 파일 하나로 끝나게 한다.
 
 소스: [src/render/](../../src/render/) · 진입: `npm run render` → [scripts/render.mjs](../../scripts/render.mjs) → `runRender()`
 
@@ -16,8 +16,8 @@
 
 ## runRender 흐름
 
-1. `desk/analyze/course.json` 없으면 중단. 있으면 [`validateCourse`](../../src/schema/validate.mjs) — 실패 시 중단.
-2. `desk/analyze/lectures/*.json` 정렬 로드, 각 [`validateLecture`](../../src/schema/validate.mjs) — 실패는 **경고 후 진행**.
+1. `artifacts/analyze/course.json` 없으면 중단. 있으면 [`validateCourse`](../../src/schema/validate.mjs) — 실패 시 중단.
+2. `artifacts/analyze/lectures/*.json` 정렬 로드, 각 [`validateLecture`](../../src/schema/validate.mjs) — 실패는 **경고 후 진행**.
 3. 강의별 [`embedFigures`](../../src/render/figures.mjs): `src`(작업폴더 상대경로)를 읽어 `embed` data URI로 채움. 파일 없는 그림은 경고 후 제외(깨진 `<img>` 방지).
 4. [`buildHtml`](../../src/render/html.mjs)로 조립 → [templates/guide.css](../../templates/guide.css) 인라인, 강의 섹션·목차·검색 포함.
 5. `desk/output/study-guide.html` 쓰기 + 리포트(강의 수·경고·임베드/누락 그림).

@@ -14,8 +14,8 @@ exam-guide 파이프라인이 만든 **처리 산출물**을 지워 새 자료�
 
 | 폴더 | 내용 | 기본 동작 |
 |---|---|---|
-| `desk/build/` | 변환 산출물(PDF·md·페이지 PNG·덤프) | **삭제** (재생성 가능) |
-| `desk/analyze/` | 분석 JSON(lectures·course) | **삭제** (재작성 대상) |
+| `artifacts/build/` | 변환 산출물(PDF·md·페이지 PNG·덤프) | **삭제** (재생성 가능) |
+| `artifacts/analyze/` | 분석 JSON(lectures·course) | **삭제** (재작성 대상) |
 | `desk/output/` | 완성 HTML | **삭제** (재렌더 가능) |
 | `desk/intake/` | 원본 강의자료 | **보존** — 사용자가 "전체/intake까지/자료도"라고 명시할 때만 삭제 |
 
@@ -23,13 +23,13 @@ exam-guide 파이프라인이 만든 **처리 산출물**을 지워 새 자료�
 
 1. **현황 표시**: 각 폴더에 무엇이 몇 개 있는지 먼저 보여준다(무엇을 지우는지 사용자가 알도록).
    ```bash
-   for d in desk/intake desk/build desk/analyze desk/output; do
+   for d in desk/intake artifacts/build artifacts/analyze desk/output; do
      echo "$d: $(find "$d" -mindepth 1 -not -name .gitkeep | wc -l) items"
    done
    ```
 2. **파생 산출물 정리** (build·analyze·output) — 기본:
    ```bash
-   find desk/build desk/analyze desk/output -mindepth 1 -not -name .gitkeep -delete
+   find artifacts/build artifacts/analyze desk/output -mindepth 1 -not -name .gitkeep -delete
    ```
 3. **자료(intake)까지 정리** — 사용자가 명시적으로 요청한 경우에만. 원본 자료는 재생성 불가하므로 지우기 전에 한 번 확인한다:
    ```bash
