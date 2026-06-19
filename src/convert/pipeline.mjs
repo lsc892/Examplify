@@ -1,4 +1,4 @@
-// 변환 파이프라인 오케스트레이션: 자료(Lecture slides/) → build/ 산출물(PDF·MD·페이지 PNG·덤프).
+// 변환 파이프라인 오케스트레이션: 자료(desk/intake/) → desk/build/ 산출물(PDF·MD·페이지 PNG·덤프).
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -14,7 +14,7 @@ import { xlsxToText } from '../extract/xlsx.mjs';
 import { hwpToText } from '../extract/hwp.mjs';
 import { pdfToMarkdown } from '../extract/pdf.mjs';
 
-/** 폴백: pdfjs 텍스트 → build/md/<file>.md (이미지 없음). 성공 시 true. */
+/** 폴백: pdfjs 텍스트 → desk/build/md/<file>.md (이미지 없음). 성공 시 true. */
 async function fallbackMarkdown(src, pdfPath, mdDir) {
   try {
     const md = await pdfToMarkdown(fs.readFileSync(pdfPath));
@@ -89,7 +89,7 @@ export async function runConvert(ws = workspace()) {
 
   // PDF → 마크다운(+이미지) + 페이지 PNG 추출.
   const py = pickPython();
-  if (py) console.log(`\n추출(Python ${py.cmd} ${py.prefix.join(' ')}): build/md + build/pages`);
+  if (py) console.log(`\n추출(Python ${py.cmd} ${py.prefix.join(' ')}): desk/build/md + desk/build/pages`);
   else console.warn('\nPython 미발견 → Node pdfjs 텍스트 폴백(이미지 없음). 그림 판독이 필요하면 `npm run setup`으로 Python+pymupdf4llm 설치.');
   let mdOk = 0, pagesOk = 0, mdFallback = 0;
   for (const { src, pdf } of producedPdfs) {
@@ -114,7 +114,7 @@ export async function runConvert(ws = workspace()) {
   const trueFail = noPdf.filter(r => !hwpDumped.has(r.src));
   console.log(`\nPDF 변환: ${report.length - noPdf.length}/${report.length} 성공`);
   console.log(`마크다운: ${mdOk}/${producedPdfs.length} (텍스트 폴백 ${mdFallback}), 페이지 PNG: ${pagesOk}/${producedPdfs.length}`);
-  for (const f of fellBack) console.log(`  ↪ HWP 텍스트 폴백: ${path.basename(f.src)} (build/hwp-dump/)`);
+  for (const f of fellBack) console.log(`  ↪ HWP 텍스트 폴백: ${path.basename(f.src)} (desk/build/hwp-dump/)`);
   for (const f of trueFail) console.warn(`  ✗ 실패: ${path.basename(f.src)}`);
   if (trueFail.length) console.warn('  → 해당 파일은 PDF/텍스트 모두 실패. 원본을 PDF로 직접 저장 후 재시도 권장.');
 

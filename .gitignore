@@ -1,16 +1,16 @@
 node_modules/
 *.log
 
-# 데이터·산출물: 폴더 구조(.gitkeep)만 남기고 내용은 제외
+# 작업공간(desk): 폴더 구조(.gitkeep)만 남기고 내용은 제외
 # (저작권 강의자료·추출물·분석결과·완성본은 커밋하지 않음)
-Lecture slides/*
-!Lecture slides/.gitkeep
+desk/intake/*
+!desk/intake/.gitkeep
 
-build/*
-!build/.gitkeep
+desk/build/*
+!desk/build/.gitkeep
 
-Analyze/*
-!Analyze/.gitkeep
+desk/analyze/*
+!desk/analyze/.gitkeep
 
-output/*
-!output/.gitkeep
+desk/output/*
+!desk/output/.gitkeep

@@ -14,9 +14,9 @@
 ```bash
 npm install
 npm run setup     # Python + pymupdf4llm 점검·설치(그림 판독용; 안내 후 동의 시 설치)
-# Lecture slides/ 에 자료를 넣고
-npm run convert   # ① 자료 → build/
-#  ② Claude가 build/ 읽고 Analyze/*.json 작성
+# desk/intake/ 에 자료를 넣고
+npm run convert   # ① 자료 → desk/build/
+#  ② Claude가 desk/build/ 읽고 desk/analyze/*.json 작성
 npm run validate  # 분석 결과 검증
-npm run render    # ③ → output/study-guide.html
+npm run render    # ③ → desk/output/study-guide.html
 ```
